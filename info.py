@@ -13,29 +13,29 @@ def is_enabled(value, default):
 
 # Bot information
 SESSION = environ.get('SESSION', 'Media_search')
-API_ID = int(environ.get('API_ID', '9301087'))
-API_HASH = environ.get('API_HASH', 'cbabdb3f23de6326352ef3ac26338d9c')
+API_ID = int(environ.get('API_ID', '21664450'))
+API_HASH = environ.get('API_HASH', '05c17bb4bf41dff36f58ad65f0ae7040')
 BOT_TOKEN = environ.get('BOT_TOKEN', "8108482995:AAGfvEMy5z6ApPbqtvRChEwTDNX_ZIQKmVQ")
 TIMEZONE = environ.get("TIMEZONE", "Asia/Kolkata")
 # Bot settings
 CACHE_TIME = int(environ.get('CACHE_TIME', 300))
 USE_CAPTION_FILTER = is_enabled((environ.get('USE_CAPTION_FILTER', 'True')), True)
 
-PICS = (environ.get('PICS', 'https://te.legra.ph/file/b042650bbb92930e6d8ea.jpg')).split()
-NOR_IMG = environ.get("NOR_IMG", "https://te.legra.ph/file/b042650bbb92930e6d8ea.jpg")
-MELCOW_VID = environ.get("MELCOW_VID", "https://te.legra.ph/file/b042650bbb92930e6d8ea.jpg")
-SPELL_IMG = environ.get("SPELL_IMG", "https://te.legra.ph/file/b042650bbb92930e6d8ea.jpg")
-SUBSCRIPTION = (environ.get('SUBSCRIPTION', 'https://te.legra.ph/file/f21806ce37bec0a9ae408.jpg'))
-CODE = (environ.get('CODE', 'https://te.legra.ph/file/f21806ce37bec0a9ae408.jpg')) # Scanner Code image 
+PICS = (environ.get('PICS', 'https://graph.org/file/af2d8d8f03575e5c054ff-97a06c96095d6a6bab.jpg')).split()
+NOR_IMG = environ.get("NOR_IMG", "https://graph.org/file/3eca1e6671cd4ac9e876f-fd7d683f7dffefac77.jpg")
+MELCOW_VID = environ.get("MELCOW_VID", "https://graph.org/file/c03d2084df244fb78e531-fb84c2ec432dd06df2.jpg")
+SPELL_IMG = environ.get("SPELL_IMG", "https://graph.org/file/12f0aa7f6d1c3becccdac-8cd38449da42c52d7d.jpg")
+SUBSCRIPTION = (environ.get('SUBSCRIPTION', 'https://graph.org/file/af2d8d8f03575e5c054ff-97a06c96095d6a6bab.jpg'))
+CODE = (environ.get('CODE', 'https://graph.org/file/aded04b556637b6137948-7fff59382356c9f03a.jpgs')) # Scanner Code image 
 
 # Admins, Channels & Users
-ADMINS = [int(admin) if id_pattern.search(admin) else admin for admin in environ.get('ADMINS', '1991522624 1525203313').split()]
+ADMINS = [int(admin) if id_pattern.search(admin) else admin for admin in environ.get('ADMINS', '5555597971').split()]
 OWNER_USER_NAME = environ.get("OWNER_USER_NAME", "Gojo_SatoruJi") # widout 👉 @
-CHANNELS = [int(ch) if id_pattern.search(ch) else ch for ch in environ.get('CHANNELS', '-1001971879597 -1001882174994').split()]
+CHANNELS = [int(ch) if id_pattern.search(ch) else ch for ch in environ.get('CHANNELS', '-1001641766504 -1001752052509 -1001971879597').split()]
 auth_users = [int(user) if id_pattern.search(user) else user for user in environ.get('AUTH_USERS', '').split()]
 AUTH_USERS = (auth_users + ADMINS) if auth_users else []
-auth_channel = environ.get('AUTH_CHANNEL', '-1002077157127')
-auth_grp = environ.get('AUTH_GROUP', '-1002280359378')
+auth_channel = environ.get('AUTH_CHANNEL', '-1001863639023')
+auth_grp = environ.get('AUTH_GROUP', '-1002290688332')
 AUTH_CHANNEL = int(auth_channel) if auth_channel and id_pattern.search(auth_channel) else None
 AUTH_GROUPS = [int(ch) for ch in auth_grp.split()] if auth_grp else None
 support_chat_id = environ.get('SUPPORT_CHAT_ID')

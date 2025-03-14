@@ -1526,7 +1526,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             return 
         else:
             buttons = [[
-                InlineKeyboardButton('📸 sᴇɴᴅ sᴄʀᴇᴇɴsʜᴏᴛ 📸', url="https://t.me/Assaulter_Shiv")
+                InlineKeyboardButton('📸 sᴇɴᴅ sᴄʀᴇᴇɴsʜᴏᴛ 📸', url="https://t.me/Gojo_SatoruJi")
             ],[
                 InlineKeyboardButton('☘️ ꜰᴜᴛᴜʀᴇ ☘️', url="https://graph.org/The-Happy-Hour-12-22-2"),
                 InlineKeyboardButton('❌ ᴄʟᴏꜱᴇ ❌', callback_data='close_data')
@@ -1874,7 +1874,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
     elif query.data == "owner_info":
             btn = [[
                     InlineKeyboardButton("⟸ Bᴀᴄᴋ", callback_data="start"),
-                    InlineKeyboardButton("Cᴏɴᴛᴀᴄᴛ", url="t.me/Assaulter_Shiv")
+                    InlineKeyboardButton("Cᴏɴᴛᴀᴄᴛ", url="t.me/Gojo_SatoruJi")
                   ]]
             await client.edit_message_media(
                 query.message.chat.id, 
@@ -2040,7 +2040,7 @@ async def auto_filter(client, msg, spoll=False):
             InlineKeyboardButton("📥 Send All File 📥", callback_data=f"sendfiles#{key}"),
         ])
         btn.insert(0, [
-            InlineKeyboardButton("Paid Promotion Available", url=f"t.me/Assaulter_Shiv"),
+            InlineKeyboardButton("Paid Promotion Available", url=f"t.me/Gojo_SatoruJi"),
         ])
     else:
         btn = []
@@ -2054,7 +2054,7 @@ async def auto_filter(client, msg, spoll=False):
             InlineKeyboardButton("📥 Send All File 📥", callback_data=f"sendfiles#{key}"),
         ])
         btn.insert(0, [
-            InlineKeyboardButton("Paid Promotion Available", url=f"t.me/Assaulter_Shiv"),
+            InlineKeyboardButton("Paid Promotion Available", url=f"t.me/Gojo_SatoruJi"),
         ])
     if offset != "":
         key = f"{message.chat.id}-{message.id}"
