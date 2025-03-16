@@ -15,7 +15,7 @@ def is_enabled(value, default):
 SESSION = environ.get('SESSION', 'Media_search')
 API_ID = int(environ.get('API_ID', '21664450'))
 API_HASH = environ.get('API_HASH', '05c17bb4bf41dff36f58ad65f0ae7040')
-BOT_TOKEN = environ.get('BOT_TOKEN', "7108482995:AAGfvEMy5z6ApPbqtvRChEwTDNX_ZIQKmVQ")
+BOT_TOKEN = environ.get('BOT_TOKEN', "6713467384:AAF5clJ8t38edv1xL6m7D5QrjReZ52dm6SQ")
 TIMEZONE = environ.get("TIMEZONE", "Asia/Kolkata")
 # Bot settings
 CACHE_TIME = int(environ.get('CACHE_TIME', 300))
@@ -56,7 +56,7 @@ SUPPORT_CHAT_ID = int(support_chat_id) if support_chat_id and id_pattern.search(
 NO_RESULTS_MSG = is_enabled((environ.get("NO_RESULTS_MSG", 'True')), False)
 
 # MongoDB information
-DATABASE_URI = environ.get('DATABASE_URI', "mongodb+srv://bob2025:bob2025@cluster0.vuo6h.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+DATABASE_URI = environ.get('DATABASE_URI', "mongodb+srv://Db2:Db2@cluster0.vy3pbot.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 DATABASE_NAME = environ.get('DATABASE_NAME', "Gojo")
 COLLECTION_NAME = environ.get('COLLECTION_NAME', 'gojo')
 
