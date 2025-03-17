@@ -1,10 +1,10 @@
 class script(object):
     START_TXT = """<b><blockquote>
-Mʏ Nᴀᴍᴇ Is #Itachi, I Cᴀɴ Pʀᴏᴠɪᴅᴇ 
+Mʏ Nᴀᴍᴇ Is #Gojo, I Cᴀɴ Pʀᴏᴠɪᴅᴇ 
 <a href='https://t.me/FILMY_MEN'>Mᴏᴠɪᴇs</a>, Jᴜsᴛ Aᴅᴅ Mᴇ Tᴏ <a href='https://t.me/FILMY_MEN'>Yᴏᴜʀ Gʀᴏᴜᴘ
 </a> Aɴᴅ Eɴᴊᴏʏ.
 
-ᴅᴇᴠʟᴏᴘᴇᴅ ʙʏ : <a href=https://t.me/Gojo_SatoruJi>Assaulter Shiv</a></blockquote></b>"""
+ᴅᴇᴠʟᴏᴘᴇᴅ ʙʏ : <a href=https://t.me/Gojo_SatoruJi>Gojo Aka Sandy</a></blockquote></b>"""
     
     HELP_TXT = """<b>ʜᴇʏ {},
 ᴡᴇ ʜᴀᴠᴇ ᴅᴇᴠɪᴅᴇᴅ ʙᴏᴛ ᴄᴏᴍᴍᴀɴᴅꜱ ꜰᴏʀ ɢʀᴏᴜᴘ ᴏᴡɴᴇʀꜱ ᴀɴᴅ ʙᴏᴛ ᴜꜱᴇʀꜱ.</b>"""
