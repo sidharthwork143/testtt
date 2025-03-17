@@ -121,7 +121,7 @@ async def start(client, message):
             #     logger.error("Mᴀᴋᴇ sᴜʀᴇ Bᴏᴛ ɪs ᴀᴅᴍɪɴ ɪɴ Fᴏʀᴄᴇsᴜʙ ᴄʜᴀɴɴᴇʟ")
             #     return
             btn = [[
-                InlineKeyboardButton("Cʜᴀɴɴᴇʟ 1", url=f't.me/FmDiscusss')
+                InlineKeyboardButton("Cʜᴀɴɴᴇʟ 1", url=f't.me/FILMY_MEN')
               ]]
     
             if message.command[1] != "subscribe":
