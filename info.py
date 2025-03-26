@@ -15,7 +15,7 @@ def is_enabled(value, default):
 SESSION = environ.get('SESSION', 'Media_search')
 API_ID = int(environ.get('API_ID', '21664450'))
 API_HASH = environ.get('API_HASH', '05c17bb4bf41dff36f58ad65f0ae7040')
-BOT_TOKEN = environ.get('BOT_TOKEN', "6401749138:AAHCF_MDnyx3R-CW62RuftVRetVz-NBeKSM")
+BOT_TOKEN = environ.get('BOT_TOKEN', "8110996623:AAHIa8ley3jAWSBRjZZ_KKm4LKlX7SVfqxA")
 TIMEZONE = environ.get("TIMEZONE", "Asia/Kolkata")
 # Bot settings
 CACHE_TIME = int(environ.get('CACHE_TIME', 300))
@@ -44,7 +44,7 @@ support_chat_id = environ.get('SUPPORT_CHAT_ID')
 API = environ.get("API", "f3b862c89a2802acfc931876f2f24096afe71e45") # shortlink api
 URL = environ.get("URL", "linkshortify.com") # shortlink domain without https://
 VERIFY_TUTORIAL = environ.get("VERIFY_TUTORIAL", "https://t.me/kaisekhole/11") # how to open link 
-BOT_USERNAME = environ.get("BOT_USERNAME", "Gojo_AutoFMbot") # bot username without @
+BOT_USERNAME = environ.get("BOT_USERNAME", "Gojo_AutoFm_Bot") # bot username without @
 VERIFY = environ.get("VERIFY", "False") # set True Or False and make sure spelling is correct and first letter capital.
 
 #reporting...
