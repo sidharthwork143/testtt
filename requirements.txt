@@ -11,7 +11,7 @@ pytz
 aiohttp
 cinemagoer
 shortzy
-
+telegraph 
 PyLeaves==1.0.2
 cinemagoer
 shortzy
