@@ -289,7 +289,7 @@ async def start(client, message):
                              [
                               InlineKeyboardButton("🖥️ ᴡᴀᴛᴄʜ & ᴅᴏᴡɴʟᴏᴀᴅ 📥", callback_data=f"streaming#{file_id}")
                            ],[
-                            InlineKeyboardButton("🌹 ʀᴇғғᴇʀ 🌹", url='https://t.me/BoB_Filter_bot?start=reffer'),
+                            InlineKeyboardButton("🌹 ʀᴇғғᴇʀ 🌹", url='https://t.me/gojo_fmAutobot?start=reffer'),
                             InlineKeyboardButton('❌ ᴄʟᴏꜱᴇ ❌', callback_data='close_data')
                         ]
                              ]
@@ -309,7 +309,7 @@ async def start(client, message):
                               InlineKeyboardButton("🖥️ ᴡᴀᴛᴄʜ & ᴅᴏᴡɴʟᴏᴀᴅ 📥", callback_data=f"streaming#{file_id}")
                               
                            ],[
-                              InlineKeyboardButton("🌹 ʀᴇғғᴇʀ 🌹", url='https://t.me/Bob_Filter_bot?start=reffer'),
+                              InlineKeyboardButton("🌹 ʀᴇғғᴇʀ 🌹", url='https://t.me/gojo_fmAutobot?start=reffer'),
                             InlineKeyboardButton('❌ ᴄʟᴏꜱᴇ ❌', callback_data='close_data')
                              ]
                             ]
@@ -502,7 +502,7 @@ async def start(client, message):
                     protect_content=True if pre == 'filep' else False,
                     reply_markup=InlineKeyboardMarkup([[
                           InlineKeyboardButton("🖥️ ᴡᴀᴛᴄʜ / ᴅᴏᴡɴʟᴏᴀᴅ 📥", callback_data=f"streaming#{file_id}")],
-                          [InlineKeyboardButton("🌹 ʀᴇғғᴇʀ 🌹", url='https://t.me/Bullmovieess_autofilter_bot?start=reffer')]]))
+                          [InlineKeyboardButton("🌹 ʀᴇғғᴇʀ 🌹", url='https://t.me/gojo_fmAutobot?start=reffer')]]))
                 return 
         elif data.startswith("all"):
             files = temp.GETALL.get(file_id)
@@ -529,7 +529,7 @@ async def start(client, message):
                             InlineKeyboardButton("♻️ Vᴇʀɪғʏ ♻️", url=await get_token(client, message.from_user.id, f"https://telegram.me/{temp.U_NAME}?start=", file_id)),
                             InlineKeyboardButton("⚠️ Hᴏᴡ Tᴏ Vᴇʀɪғʏ ⚠️", url=HOW_TO_VERIFY)
                             ],[
-                            InlineKeyboardButton("🏕️ ʀᴇᴍᴏᴠᴇ ᴠᴇʀɪꜰɪᴄᴀᴛɪᴏɴ 🏕️", url="https://t.me/Gojo_AutoFMbot?start=TheHappyHour")
+                            InlineKeyboardButton("🏕️ ʀᴇᴍᴏᴠᴇ ᴠᴇʀɪꜰɪᴄᴀᴛɪᴏɴ 🏕️", url="https://t.me/gojo_fmAutobot?start=TheHappyHour")
                             ]]
                     await message.reply_text(
                         text="Just Verify One Time And Get Movies For next 12hr without any verification\n\nबस एक बार verify करें और बिना किसी verification के अगले 12 घंटों के लिए फिल्में प्राप्त करें\n\nClick The Button Below To Check How to Verify ✅",
@@ -547,7 +547,7 @@ async def start(client, message):
                          [
                           InlineKeyboardButton("🖥️ ᴡᴀᴛᴄʜ / ᴅᴏᴡɴʟᴏᴀᴅ 📥", callback_data=f"streaming#{file_id}")
                        ],[
-                              InlineKeyboardButton("🌹 ʀᴇғғᴇʀ 🌹", url='https://t.me/Gojo_AutoFMbot?start=reffer')       
+                              InlineKeyboardButton("🌹 ʀᴇғғᴇʀ 🌹", url='https://t.me/gojo_fmAutobot?start=reffer')       
                              ]
                         ]
                     )
@@ -570,7 +570,7 @@ async def start(client, message):
                         InlineKeyboardButton("♻️ Vᴇʀɪғʏ ♻️", url=await get_token(client, message.from_user.id, f"https://telegram.me/{temp.U_NAME}?start=", file_id)),
                         InlineKeyboardButton("⚠️ Hᴏᴡ Tᴏ Vᴇʀɪғʏ ⚠️", url=HOW_TO_VERIFY)
                         ],[
-                        InlineKeyboardButton("🏕️ ʀᴇᴍᴏᴠᴇ ᴠᴇʀɪꜰɪᴄᴀᴛɪᴏɴ 🏕️", url="https://t.me/Gojo_AutoFMbot?start=TheHappyHour")
+                        InlineKeyboardButton("🏕️ ʀᴇᴍᴏᴠᴇ ᴠᴇʀɪꜰɪᴄᴀᴛɪᴏɴ 🏕️", url="https://t.me/gojo_fmAutobot?start=TheHappyHour")
                     ]]
                     await message.reply_text(
                         text="Just Verify One Time And Get Movies For next 12hr without any verification\n\nबस एक बार verify करें और बिना किसी verification के अगले 12 घंटों के लिए फिल्में प्राप्त करें\n\nClick The Button Below To Check How to Verify ✅",
@@ -588,7 +588,7 @@ async def start(client, message):
                           InlineKeyboardButton("🖥️ ᴡᴀᴛᴄʜ & ᴅᴏᴡɴʟᴏᴀᴅ 📥", callback_data=f"streaming#{file_id}")
                   
                        ],[
-                              InlineKeyboardButton("🌹 ʀᴇғғᴇʀ 🌹", url='https://t.me/Gojo_AutoFMbot?start=reffer'),
+                              InlineKeyboardButton("🌹 ʀᴇғғᴇʀ 🌹", url='https://t.me/gojo_fmAutobot?start=reffer'),
                              InlineKeyboardButton('❌ ᴄʟᴏꜱᴇ ❌', callback_data='close_data')
                              ]
                         ]
@@ -632,7 +632,7 @@ async def start(client, message):
                 InlineKeyboardButton("♻️ Vᴇʀɪғʏ ♻️", url=await get_token(client, message.from_user.id, f"https://telegram.me/{temp.U_NAME}?start=", file_id)),
                 InlineKeyboardButton("⚠️ Hᴏᴡ Tᴏ Vᴇʀɪғʏ ⚠️", url=HOW_TO_VERIFY)
                 ],[
-                InlineKeyboardButton("🏕️ ʀᴇᴍᴏᴠᴇ ᴠᴇʀɪꜰɪᴄᴀᴛɪᴏɴ 🏕️", url="https://t.me/Gojo_AutoFMbot?start=TheHappyHour")
+                InlineKeyboardButton("🏕️ ʀᴇᴍᴏᴠᴇ ᴠᴇʀɪꜰɪᴄᴀᴛɪᴏɴ 🏕️", url="https://t.me/gojo_fmAutobot?start=TheHappyHour")
             ]]
             await message.reply_text(
                 text="Just Verify One Time And Get Movies For next 12hr without any verification\n\nबस एक बार verify करें और बिना किसी verification के अगले 12 घंटों के लिए फिल्में प्राप्त करें\n\nClick The Button Below To Check How to Verify ✅",
@@ -650,7 +650,7 @@ async def start(client, message):
                  [
                  InlineKeyboardButton("🖥️ ᴡᴀᴛᴄʜ & ᴅᴏᴡɴʟᴏᴀᴅ 📥", callback_data=f"streaming#{file_id}")  
                  ],[
-                 InlineKeyboardButton("🌹 ʀᴇғғᴇʀ 🌹", url='https://t.me/Gojo_AutoFMbot?start=reffer'),
+                 InlineKeyboardButton("🌹 ʀᴇғғᴇʀ 🌹", url='https://t.me/gojo_fmAutobot?start=reffer'),
                  InlineKeyboardButton('❌ ᴄʟᴏꜱᴇ ❌', callback_data='close_data')
                  ]
                 ]
