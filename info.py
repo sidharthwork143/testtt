@@ -12,9 +12,9 @@ def is_enabled(value, default):
         return default
 
 # Bot information
-SESSION = environ.get('SESSION', 'Media_search')
-API_ID = int(environ.get('API_ID', '21664450'))
-API_HASH = environ.get('API_HASH', '05c17bb4bf41dff36f58ad65f0ae7040')
+SESSION = environ.get('SESSION', 'fmgojo')
+API_ID = int(environ.get('API_ID', '20612439'))
+API_HASH = environ.get('API_HASH', '6713c32d1216016b3d81efac3cdcdfba')
 BOT_TOKEN = environ.get('BOT_TOKEN', "8110996623:AAHIa8ley3jAWSBRjZZ_KKm4LKlX7SVfqxA")
 TIMEZONE = environ.get("TIMEZONE", "Asia/Kolkata")
 # Bot settings
@@ -56,7 +56,7 @@ SUPPORT_CHAT_ID = int(support_chat_id) if support_chat_id and id_pattern.search(
 NO_RESULTS_MSG = is_enabled((environ.get("NO_RESULTS_MSG", 'True')), False)
 
 # MongoDB information
-DATABASE_URI = environ.get('DATABASE_URI', "mongodb+srv://sidharthwork143:HhctwrT8Fnd8calp@cluster0.l6eq6.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+DATABASE_URI = environ.get('DATABASE_URI', "mongodb+srv://sidharthwork143:fMT2tsHAO9sl6Y8I@cluster0.jmgxjbm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 DATABASE_NAME = environ.get('DATABASE_NAME', "Gojofm")
 COLLECTION_NAME = environ.get('COLLECTION_NAME', 'Gojofm')
 
