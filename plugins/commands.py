@@ -309,8 +309,8 @@ async def start(client, message):
                               InlineKeyboardButton("🖥️ ᴡᴀᴛᴄʜ & ᴅᴏᴡɴʟᴏᴀᴅ 📥", callback_data=f"streaming#{file_id}")
                               
                            ],[
-                              InlineKeyboardButton("🌹 ʀᴇғғᴇʀ 🌹", url='https://t.me/gojo_fmAutobot?start=reffer'),
-                            InlineKeyboardButton('❌ ᴄʟᴏꜱᴇ ❌', callback_data='close_data')
+                              
+                            InlineKeyboardButton('🔙 ᴄʟᴏꜱᴇ 🔚', callback_data='close_data')
                              ]
                             ]
                         )
@@ -409,7 +409,7 @@ async def start(client, message):
                 InlineKeyboardButton('📸 sᴇɴᴅ sᴄʀᴇᴇɴsʜᴏᴛ 📸', url="https://t.me/Gojo_SatoruJi")
             ],[
                 InlineKeyboardButton('☘️ ꜰᴜᴛᴜʀᴇ ☘️', url="https://graph.org/The-Happy-Hour-12-22-2"),
-                InlineKeyboardButton('❌ ᴄʟᴏꜱᴇ ❌', callback_data='close_data')
+                InlineKeyboardButton('🔙 ᴄʟᴏꜱᴇ 🔚', callback_data='close_data')
             ]]
             reply_markup = InlineKeyboardMarkup(btn)
             await message.reply_photo(
@@ -434,7 +434,7 @@ async def start(client, message):
             btn = [[
                 InlineKeyboardButton(f"invite 🔗", url=f"https://telegram.me/share/url?url=https://telegram.me/{temp.U_NAME}=reff_{user_id}"),
                 InlineKeyboardButton(f"⏳{total}", callback_data=f"show_reff"),
-                InlineKeyboardButton('❌ ᴄʟᴏꜱᴇ ❌', callback_data='close_data')
+                InlineKeyboardButton('🔙 ᴄʟᴏꜱᴇ 🔚', callback_data='close_data')
             ]]
             reply_markup = InlineKeyboardMarkup(btn)
             await message.reply_photo(
