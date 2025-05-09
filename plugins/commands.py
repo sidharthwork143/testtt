@@ -502,7 +502,7 @@ async def start(client, message):
                     protect_content=True if pre == 'filep' else False,
                     reply_markup=InlineKeyboardMarkup([[
                           InlineKeyboardButton("🖥️ ᴡᴀᴛᴄʜ / ᴅᴏᴡɴʟᴏᴀᴅ 📥", callback_data=f"streaming#{file_id}")]},
-                          #[InlineKeyboardButton("🌹 ʀᴇғғᴇʀ 🌹", url='https://t.me/gojo_fmAutobot?start=reffer')]]))
+                          [InlineKeyboardButton("🌹 ʀᴇғғᴇʀ 🌹", url='https://t.me/gojo_fmAutobot?start=reffer')]]))
                 return 
         elif data.startswith("all"):
             files = temp.GETALL.get(file_id)
