@@ -15,7 +15,7 @@ def is_enabled(value, default):
 SESSION = environ.get('SESSION', 'fmgojo')
 API_ID = int(environ.get('API_ID', '20612439'))
 API_HASH = environ.get('API_HASH', '6713c32d1216016b3d81efac3cdcdfba')
-BOT_TOKEN = environ.get('BOT_TOKEN', "8110996623:AAHIa8ley3jAWSBRjZZ_KKm4LKlX7SVfqxA")
+BOT_TOKEN = environ.get('BOT_TOKEN', "6713467384:AAF5clJ8t38edv1xL6m7D5QrjReZ52dm6SQ")
 TIMEZONE = environ.get("TIMEZONE", "Asia/Kolkata")
 # Bot settings
 CACHE_TIME = int(environ.get('CACHE_TIME', 300))
@@ -31,7 +31,7 @@ CODE = (environ.get('CODE', 'https://graph.org/file/aded04b556637b6137948-7fff59
 # Admins, Channels & Users
 ADMINS = [int(admin) if id_pattern.search(admin) else admin for admin in environ.get('ADMINS', '5555597971').split()]
 OWNER_USER_NAME = environ.get("OWNER_USER_NAME", "Gojo_SatoruJi") # widout 👉 @
-CHANNELS = [int(ch) if id_pattern.search(ch) else ch for ch in environ.get('CHANNELS', '-1001641766504 -1001752052509 -1001971879597').split()]
+CHANNELS = [int(ch) if id_pattern.search(ch) else ch for ch in environ.get('CHANNELS', '-1002199205794').split()]
 auth_users = [int(user) if id_pattern.search(user) else user for user in environ.get('AUTH_USERS', '').split()]
 AUTH_USERS = (auth_users + ADMINS) if auth_users else []
 auth_channel = environ.get('AUTH_CHANNEL', '-1001863639023')
@@ -44,12 +44,12 @@ support_chat_id = environ.get('SUPPORT_CHAT_ID')
 API = environ.get("API", "f3b862c89a2802acfc931876f2f24096afe71e45") # shortlink api
 URL = environ.get("URL", "linkshortify.com") # shortlink domain without https://
 VERIFY_TUTORIAL = environ.get("VERIFY_TUTORIAL", "https://t.me/kaisekhole/11") # how to open link 
-BOT_USERNAME = environ.get("BOT_USERNAME", "GojoAutoFmBot") # bot username without @
+BOT_USERNAME = environ.get("BOT_USERNAME", "SampleFmBot") # bot username without @
 VERIFY = environ.get("VERIFY", "False") # set True Or False and make sure spelling is correct and first letter capital.
 
 #reporting...
 TOP_SEARCH = is_enabled((environ.get('TOP_SEARCH', "False")), False)
-reqst_channel = environ.get('REQST_CHANNEL_ID', "-1002104914260")
+reqst_channel = environ.get('REQST_CHANNEL_ID', "-1002095974601")
 REQST_CHANNEL = int(reqst_channel) if reqst_channel and id_pattern.search(reqst_channel) else None
 GRP_REPORT_CHANNEL = int(environ.get('GRP_REPORT_CHANNEL', "-1002095974601"))
 SUPPORT_CHAT_ID = int(support_chat_id) if support_chat_id and id_pattern.search(support_chat_id) else None
