@@ -44,7 +44,7 @@ support_chat_id = environ.get('SUPPORT_CHAT_ID')
 API = environ.get("API", "f3b862c89a2802acfc931876f2f24096afe71e45") # shortlink api
 URL = environ.get("URL", "linkshortify.com") # shortlink domain without https://
 VERIFY_TUTORIAL = environ.get("VERIFY_TUTORIAL", "https://t.me/kaisekhole/11") # how to open link 
-BOT_USERNAME = environ.get("BOT_USERNAME", "Gojo_AutoFm_Bot") # bot username without @
+BOT_USERNAME = environ.get("BOT_USERNAME", "GojoAutoFmBot") # bot username without @
 VERIFY = environ.get("VERIFY", "False") # set True Or False and make sure spelling is correct and first letter capital.
 
 #reporting...
@@ -56,9 +56,9 @@ SUPPORT_CHAT_ID = int(support_chat_id) if support_chat_id and id_pattern.search(
 NO_RESULTS_MSG = is_enabled((environ.get("NO_RESULTS_MSG", 'True')), False)
 
 # MongoDB information
-DATABASE_URI = environ.get('DATABASE_URI', "mongodb+srv://sidharthwork143:fMT2tsHAO9sl6Y8I@cluster0.jmgxjbm.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
-DATABASE_NAME = environ.get('DATABASE_NAME', "Gojofm")
-COLLECTION_NAME = environ.get('COLLECTION_NAME', 'Gojofm')
+DATABASE_URI = environ.get('DATABASE_URI', "mongodb+srv://chintubru57:BGry1i2E4yERQmZe@chintubru.i3kvekw.mongodb.net/?retryWrites=true&w=majority&appName=chintubru")
+DATABASE_NAME = environ.get('DATABASE_NAME', "Gojo")
+COLLECTION_NAME = environ.get('COLLECTION_NAME', 'Gojo')
 
 #refer time, or user count
 REFERAL_USER_TIME = int(environ.get('REFERAL_USER_TIME', "2592000")) # set in seconds | already seted 1 month premium
