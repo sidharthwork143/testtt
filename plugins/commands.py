@@ -497,12 +497,14 @@ async def start(client, message):
                         f_caption = f"{' '.join(filter(lambda x: not x.startswith('[') and not x.startswith('@'), files.file_name.split()))}"
                 msg=await client.send_cached_media(
                     chat_id=message.from_user.id,
-                    file_id=file_id,
-                    caption=f_caption,
-                    protect_content=True if pre == 'filep' else False,
-                    reply_markup=InlineKeyboardMarkup([[
-                          InlineKeyboardButton("🖥️ ᴡᴀᴛᴄʜ / ᴅᴏᴡɴʟᴏᴀᴅ 📥", callback_data=f"streaming#{file_id}")],
-                          ]))
+                    file_id=file_id, 
+                    caption=f_caption, 
+                    protect_content=True if pre == 'filep' else False, 
+                    reply_markup=InlineKeyboardMarkup([
+                         [
+                          InlineKeyboardButton("🖥️ ᴡᴀᴛᴄʜ / ᴅᴏᴡɴʟᴏᴀᴅ 📥", callback_data=f"streaming#{file_id}")
+                         ]
+               ])
                 return 
         elif data.startswith("all"):
             files = temp.GETALL.get(file_id)
