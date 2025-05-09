@@ -500,16 +500,9 @@ async def start(client, message):
                     file_id=file_id,
                     caption=f_caption,
                     protect_content=True if pre == 'filep' else False,
-                    reply_markup = InlineKeyboardMarkup(
-    [
-        [
-           InlineKeyboardButton("🖥 ᴡᴀᴛᴄʜ / ᴅᴏᴡɴʟᴏᴀᴅ 📥", callback_data=f"streaming#{file_id}")],
-    
-        [
-            InlineKeyboardButton("❌ ᴄʟᴏꜱᴇ ❌", callback_data='close_data')
-        ]
-    ]
-)
+                    reply_markup=InlineKeyboardMarkup([[
+                          InlineKeyboardButton("🖥️ ᴡᴀᴛᴄʜ / ᴅᴏᴡɴʟᴏᴀᴅ 📥", callback_data=f"streaming#{file_id}")],
+                          ]))
                 return 
         elif data.startswith("all"):
             files = temp.GETALL.get(file_id)
