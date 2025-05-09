@@ -503,8 +503,8 @@ async def start(client, message):
                     reply_markup = InlineKeyboardMarkup(
     [
         [
-            InlineKeyboardButton("🖥️ ᴡᴀᴛᴄʜ / ᴅᴏᴡɴʟᴏᴀᴅ 📥", callback_data=f"streaming#{file_id}")
-        ],
+           InlineKeyboardButton("🖥 ᴡᴀᴛᴄʜ / ᴅᴏᴡɴʟᴏᴀᴅ 📥", callback_data=f"streaming#{file_id}")],
+    
         [
             InlineKeyboardButton("❌ ᴄʟᴏꜱᴇ ❌", callback_data='close_data')
         ]
