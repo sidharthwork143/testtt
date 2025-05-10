@@ -504,7 +504,7 @@ async def start(client, message):
                          [
                           InlineKeyboardButton("🖥️ ᴡᴀᴛᴄʜ / ᴅᴏᴡɴʟᴏᴀᴅ 📥", callback_data=f"streaming#{file_id}")
                          ]
-               ])
+               ]))
                 return 
         elif data.startswith("all"):
             files = temp.GETALL.get(file_id)
