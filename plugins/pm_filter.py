@@ -1,4 +1,10 @@
 # Kanged From @TroJanZheX
+import difflib # For string similarity
+# ... other imports ...
+
+# Helper function to calculate similarity ratio
+def get_string_similarity(string1, string2):
+    return difflib.SequenceMatcher(None, string1.lower(), string2.lower()).ratio()
 import asyncio
 import re
 import ast
