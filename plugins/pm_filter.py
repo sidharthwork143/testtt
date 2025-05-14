@@ -1094,7 +1094,67 @@ async def cb_handler(client: Client, query: CallbackQuery):
         except Exception as e:
             logger.exception(e)
             await query.answer(url=f"https://telegram.me/{temp.U_NAME}?start=sendfiles4_{key}")
+      # ... inside cb_handler(client, query):
+
+    # elif query.data.startswith("spol"): 
+        # This is your existing spell check callback for Google/IMDb results
+        # Keep this as is, or decide if db_spell replaces its functionality entirely.
+        # For now, we add db_spell as a new handler.
+
+    elif query.data.startswith("db_spell"):
+        try:
+            ident, user_id_str, movie_idx_str = query.data.split('#')
             
+            # The SPELL_CHECK dictionary is keyed by the ID of the original user's message.
+            # query.message is the bot's message (with buttons).
+            # query.message.reply_to_message should be the original user's message.
+            if not query.message.reply_to_message:
+                return await query.answer("Cannot find the original message for this action.", show_alert=True)
+                
+            original_user_message_id = query.message.reply_to_message.id
+            correct_movie_names_list = SPELL_CHECK.get(original_user_message_id)
+
+            if not correct_movie_names_list:
+                return await query.answer(script.OLD_ALRT_TXT.format(query.from_user.first_name), show_alert=True)
+            
+            if query.from_user.id != int(user_id_str): # Ensure the clicker is the original requester
+                return await query.answer(script.ALRT_TXT.format(query.from_user.first_name), show_alert=True)
+            
+            if movie_idx_str == "close_spellcheck":
+                await query.message.delete()
+                return await query.answer("Closed.")
+
+            selected_movie_name = correct_movie_names_list[int(movie_idx_str)]
+            
+            await query.answer(script.TOP_ALRT_MSG, show_alert=False) # "Searching..."
+            
+            # Fetch the files for this exact selected_movie_name
+            files_to_send, offset_to_send, total_results_to_send = await get_search_results(
+                query.message.reply_to_message.chat.id, # Chat ID from original message
+                selected_movie_name,
+                offset=0,
+                filter=True # Use strict filter for the selected name
+            )
+
+            if files_to_send:
+                # Call auto_filter using the original user message as the context `msg`
+                # and `spoll` to provide the corrected search details.
+                await auto_filter(client, query.message.reply_to_message, 
+                                  spoll=(selected_movie_name, files_to_send, offset_to_send, total_results_to_send))
+                await query.message.delete() # Delete the suggestion message (with buttons)
+            else:
+                # This case should ideally not happen if the name came directly from DB files.
+                await query.message.edit_text(script.MVE_NT_FND) # "Movie not found"
+                # Optionally, auto-delete this message too after a delay
+                # await asyncio.sleep(60)
+                # await query.message.delete()
+
+        except Exception as e:
+            logger.exception(f"Error in db_spell callback: {e}")
+            await query.answer("An error occurred processing your selection.", show_alert=True)
+        return # cb_handler should return after processing if it's a specific callback like this
+
+    # ... other elif blocks in cb_handler      
             
     elif query.data.startswith("checksub"):
         if AUTH_CHANNEL and not await is_subscribed(client, query):
