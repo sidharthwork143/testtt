@@ -2035,8 +2035,7 @@ async def cb_handler(client: Client, query: CallbackQuery):
             reply_markup = InlineKeyboardMarkup(buttons)
             await query.message.edit_reply_markup(reply_markup)
     await query.answer(MSG_ALRT)
-
- async def get_db_spell_check_suggestions(chat_id, user_query, client, settings,
+async def get_db_spell_check_suggestions(chat_id, user_query, client, settings,
                                          threshold_suggestion=0.60, 
                                          threshold_direct_send=0.80,
                                          candidate_limit=100): # Max candidates to check for similarity
