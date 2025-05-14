@@ -2068,42 +2068,267 @@ async def cb_handler(client: Client, query: CallbackQuery):
     return direct_send_candidate, suggestions_list[:5] # Return top 5 suggestions if not direct sending
    
 async def auto_filter(client, msg, spoll=False):
-    curr_time = datetime.now(pytz.timezone('Asia/Kolkata')).time()
-    #reqstr1 = msg.from_user.id
-    #reqstr = await client.get_users(reqstr1)
+    curr_time = datetime.now(pytz.timezone('Asia/Kolkata')).time() # Keep this or similar for timing
+    
     if not spoll:
         message = msg
-        if message.text.startswith("/"): return  # ignore commands
+        if message.text.startswith("/"): return
         if re.findall("((^\/|^,|^!|^\.|^[\U0001F600-\U000E007F]).*)", message.text):
             return
-        if len(message.text) < 100:
+        
+        search_query_text = message.text # Original user query for logs/display if needed
+        if len(message.text) < 100: # Existing length check
             search = message.text
-            # m=await message.reply_sticker(sticker="CAACAgIAAxkBAAEqmBFmOgFHqMIU2aIv1tlIgJO5V1RcZwACnFwBAAFji0YM2veI_Lsd8FIeBA",
-            # reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Plzz Wait", url=CHNL_LNK)]]))
+            # Your existing query cleaning logic to produce the 'search' variable
             search = search.lower()
             find = search.split(" ")
-            search = ""
+            search_cleaned_for_db = "" # Renamed to avoid conflict with 'search' used later for display
             removes = ["in","upload", "series", "full", "horror", "thriller", "mystery", "print", "file", "send", "chahiye", "chiye", "movi", "movie", "bhejo", "dijiye", "jaldi", "hd", "bollywood", "hollywood", "south", "karo"]
             for x in find:
                 if x in removes:
                     continue
                 else:
-                    search = search + x + " "
-            search = re.sub(r"\b(pl(i|e)*?(s|z+|ease|se|ese|(e+)s(e)?)|((send|snd|giv(e)?|gib)(\sme)?)|movie(s)?|new|latest|bro|bruh|broh|helo|that|find|dubbed|link|venum|iruka|pannunga|pannungga|anuppunga|anupunga|anuppungga|anupungga|film|undo|kitti|kitty|tharu|kittumo|kittum|movie|any(one)|with\ssubtitle(s)?)", "", search, flags=re.IGNORECASE)
-            search = re.sub(r"\s+", " ", search).strip()
-            search = search.replace("-", " ")
-            search = search.replace(":","")
-            files, offset, total_results = await get_search_results(message.chat.id ,search, offset=0, filter=True)
+                    search_cleaned_for_db = search_cleaned_for_db + x + " "
+            
+            search_cleaned_for_db = re.sub(r"\b(pl(i|e)*?(s|z+|ease|se|ese|(e+)s(e)?)|((send|snd|giv(e)?|gib)(\sme)?)|movie(s)?|new|latest|bro|bruh|broh|helo|that|find|dubbed|link|venum|iruka|pannunga|pannungga|anuppunga|anupunga|anuppungga|anupungga|film|undo|kitti|kitty|tharu|kittumo|kittum|movie|any(one)|with\ssubtitle(s)?)", "", search_cleaned_for_db, flags=re.IGNORECASE)
+            search_cleaned_for_db = re.sub(r"\s+", " ", search_cleaned_for_db).strip()
+            search_cleaned_for_db = search_cleaned_for_db.replace("-", " ")
+            search_cleaned_for_db = search_cleaned_for_db.replace(":","")
+            
+            # This 'search' variable will be used for display purposes later (IMDb, captions)
+            # For the actual DB query, use search_cleaned_for_db
+            search_for_display = search_cleaned_for_db 
+            
+            files, offset, total_results = await get_search_results(message.chat.id, search_cleaned_for_db, offset=0, filter=True)
             settings = await get_settings(message.chat.id)
-            if not files:
-                #await m.delete()
-                if settings["spell_check"]:
-                    return await advantage_spell_chok(client, msg)
-                else:
-                    #if not PM_FILTER and NO_RESULTS_MSG:
-                        #total=await client.get_chat_members_count(message.chat.id)
-                        #await client.send_message(chat_id=LOG_CHANNEL, text=(script.NORSLTS.format(message.chat.title, message.chat.id, total, temp.B_NAME, reqstr.mention, search)))
-                    return
+
+            if not files and settings["spell_check"]: # No exact results, and spell_check is enabled
+                # NEW SPELL CHECK LOGIC INTEGRATION
+                direct_candidate, db_suggestions = await get_db_spell_check_suggestions(
+                    message.chat.id, 
+                    search_cleaned_for_db, # Use the cleaned query for suggestions
+                    client,
+                    settings
+                )
+
+                if direct_candidate:
+                    # Found a match >= 80%, directly trigger file sending part of auto_filter
+                    # The 'name' in direct_candidate is the actual DB filename
+                    # Fetch files again using the *exact DB filename* to ensure we get the correct ones
+                    files_for_direct, offset_for_direct, total_for_direct = await get_search_results(
+                        message.chat.id, 
+                        direct_candidate['name'], # Use the exact name from DB
+                        offset=0, 
+                        filter=True
+                    )
+                    if files_for_direct:
+                        # Call auto_filter with spoll=True, using the DB filename as the search term for display
+                        await query.answer(f"Match found: {direct_candidate['name']}", show_alert=False) # Optional alert
+                        await auto_filter(client, msg, spoll=(direct_candidate['name'], files_for_direct, offset_for_direct, total_for_direct))
+                        return # Important: exit after processing direct send
+
+                elif db_suggestions: # No direct send, but suggestions < 80% and >= 60% exist
+                    # Store suggestions for the callback handler. Key by original message ID.
+                    SPELL_CHECK[message.id] = [s['name'] for s in db_suggestions]
+                    
+                    buttons = [[
+                        InlineKeyboardButton(
+                            text=f"{s['name']} ({int(s['score']*100)}% match)",
+                            callback_data=f"db_spell#{message.from_user.id}#{k}", # k is the index
+                        )] for k, s in enumerate(db_suggestions)
+                    ]
+                    buttons.append([InlineKeyboardButton(text="❌ Close", callback_data=f'db_spell#{message.from_user.id}#close_spellcheck')])
+                    
+                    await msg.reply_photo( # msg is the original user message object
+                        photo=(SPELL_IMG), # Make sure SPELL_IMG is defined in info.py or Script.py
+                        caption=script.CUDNT_FND.format(search_query_text) + "\n\nDid you mean one of these from my database?", # search_query_text or cleaned search?
+                        reply_markup=InlineKeyboardMarkup(buttons)
+                    )
+                    # Handle auto-deletion of this suggestion message if configured
+                    # Example:
+                    # if settings.get('auto_delete_spell_check_msg', False): # Add this setting if needed
+                    #     await asyncio.sleep(settings.get('spell_check_msg_delete_delay', 60))
+                    #     try: await spell_check_message.delete() # Need to store the message object
+                    return # Important: wait for user to click a button
+
+                else: # No DB-based suggestions found, fall back to original Google/IMDb spell check
+                    if settings.get("spell_check_fallback", True): # Add a setting to control this fallback
+                         return await advantage_spell_chok(client, msg) # msg is the original user message
+                    else: # No fallback, just show no results
+                        # ... (your existing NO_RESULTS_MSG logic if any for groups) ...
+                        return
+
+
+            # If files were found initially (exact match) or spell check is off, or no suggestions from DB spell check & no fallback
+            # The rest of the function will execute using the `files, offset, total_results` from the initial search.
+            # If `spoll` is True in a recursive call, it will use those details.
+            search_for_display = search_cleaned_for_db # Ensure search_for_display is set for the rest of function
+
+        else: # Message too long
+            return
+    else: # spoll is True, means this is a call from a suggestion or direct 80% match
+        message = msg.message.reply_to_message if isinstance(msg, CallbackQuery) else msg # Adjust if msg is directly the message
+        search_for_display, files, offset, total_results = spoll # unpack spoll
+        settings = await get_settings(message.chat.id)
+        # Fall through to the existing display logic below
+
+    # Ensure search_for_display is defined for the rest of the function
+    if 'search_for_display' not in locals():
+        if spoll:
+             search_for_display = spoll[0] # The corrected name
+        else: # Should have been set from the initial cleaning
+            search_for_display = search_cleaned_for_db if 'search_cleaned_for_db' in locals() else "Unknown Query"
+
+
+    # Key for storing button states and GETALL files
+    key = f"{message.chat.id}-{message.id if not spoll else msg.id if isinstance(msg, types.Message) else query.message.reply_to_message.id}" # Adjust key based on context
+    # If spoll is from a callback, query.message.reply_to_message.id is the original user message ID.
+    # If spoll is from 80% direct match, msg.id is the original user message ID.
+
+    temp.GETALL[key] = files
+    temp.KEYWORD[message.from_user.id] = search_for_display # Use the name that led to these files
+    temp.SHORT[message.from_user.id] = message.chat.id
+    
+    # ... (The rest of your auto_filter function that prepares buttons and sends the message)
+    # Ensure it uses `search_for_display` for captions and IMDb lookups, and `files`, `offset`, `total_results`
+    # Example for IMDb poster:
+    # imdb = await get_poster(search_for_display, file=(files[0]).file_name) if settings["imdb"] else None
+
+    # Make sure the `cap` variable is generated using `search_for_display`
+    # For example, if imdb: cap = TEMPLATE.format(query=search_for_display, title=imdb['title'], ...)
+    # if not imdb: CAPTION = f"🌿 Requested For : {search_for_display} by {message.from_user.mention}..."
+    # Ensure all parts of the message generation use `search_for_display` where the query text is needed.
+
+    # For pagination buttons, BUTTONS[key] should also be set to search_for_display
+    if offset != "": # If there are more pages
+        BUTTONS[key] = search_for_display
+
+
+    # Existing logic for sending photo or text reply starts here
+    # Ensure all references to 'search' in this part are replaced with 'search_for_display'
+    # if it's meant to be the term used for fetching IMDb or displaying in caption.
+
+    # Example (ensure this uses the correct search term):
+    # imdb = await get_poster(search_for_display, file=(files[0]).file_name) if settings["imdb"] else None
+    # ...
+    # if imdb:
+    #     cap = TEMPLATE.format(
+    #         query=search_for_display, # Use search_for_display
+    # ...
+    # else:
+    #     CAPTION = f"<b>🌿 Requested By : {message.from_user.mention}\n📚 Total Files : {total_results}\n⏰ Result In : {remaining_seconds} sᴇᴄᴏɴᴅs\n\n</b>" # Example
+    #     if settings["button"]:
+    #          cap = f"Results for: {search_for_display}\n{CAPTION}" # Show what it's for
+    # ...
+
+    # --- The rest of your auto_filter function for displaying results ---
+    # This part should remain largely the same but ensure 'search' variable references
+    # are appropriate (either original user query or corrected one).
+    # The variable `search_for_display` should be used when generating the output message
+    # if it's meant to show the term for which results are being displayed.
+    # For `BUTTONS[key] = search`, it should be `BUTTONS[key] = search_for_display`.
+
+    # [Your existing button creation and message sending logic here]
+    # Ensure it correctly uses `files`, `offset`, `total_results`, and `search_for_display`
+    # For example, the IMDB poster fetching:
+    imdb = await get_poster(search_for_display, file=(files[0]).file_name) if settings.get("imdb") and files else None
+    # ... and then generating the caption `cap` using `search_for_display`
+    
+    # --- Beginning of message sending part (adapt as per your existing code) ---
+    if imdb and imdb.get('poster'):
+        try:
+            # ... existing code to send photo ...
+            # Ensure `cap` is generated with `search_for_display`
+            final_caption = await generate_final_caption(settings, imdb, search_for_display, files, total_results, remaining_seconds, client, message, temp) # You might need a helper for this
+            hehe = await message.reply_photo(photo=imdb.get('poster'), caption=final_caption, reply_markup=InlineKeyboardMarkup(btn))
+            # ... auto-delete logic ...
+        except (MediaEmpty, PhotoInvalidDimensions, WebpageMediaEmpty):
+            pic = imdb.get('poster')
+            poster = pic.replace('.jpg', "._V1_UX360.jpg")
+            final_caption = await generate_final_caption(settings, imdb, search_for_display, files, total_results, remaining_seconds, client, message, temp)
+            hmm = await message.reply_photo(photo=poster, caption=final_caption, reply_markup=InlineKeyboardMarkup(btn))
+            # ... auto-delete logic ...
+        except Exception as e:
+            logger.exception(e)
+            final_caption = await generate_final_caption(settings, None, search_for_display, files, total_results, remaining_seconds, client, message, temp) # IMDb failed, no poster
+            fek = await message.reply_text(text=final_caption, reply_markup=InlineKeyboardMarkup(btn))
+            # ... auto-delete logic ...
+    else: # No IMDb poster
+        final_caption = await generate_final_caption(settings, None, search_for_display, files, total_results, remaining_seconds, client, message, temp)
+        fuk = await message.reply_text(text=final_caption, reply_markup=InlineKeyboardMarkup(btn))
+        # ... auto-delete logic ...
+
+    if spoll and isinstance(msg, CallbackQuery): # If called from a callback
+        await msg.message.delete() # Delete the suggestion message
+
+# You'll need a helper to generate the final caption consistently
+async def generate_final_caption(settings, imdb_data, search_term, files_list, total_results_count, time_taken_str, client, original_message, temp_module):
+    # This function should replicate how your bot currently builds its main response message caption.
+    # It uses `search_term` which is the (potentially corrected) term for which results are shown.
+    
+    # Basic structure, adapt from your existing `auto_filter`'s caption generation:
+    if imdb_data:
+        cap = settings.get('template', script.IMDB_TEMPLATE_TXT) # Assuming template is in settings
+        # Safely format the template
+        try:
+            current_template = cap.format(
+                query=search_term,
+                title=imdb_data.get('title', 'N/A'),
+                votes=imdb_data.get('votes', 'N/A'),
+                aka=imdb_data.get("aka", 'N/A'),
+                seasons=imdb_data.get("seasons", 'N/A'),
+                box_office=imdb_data.get('box_office', 'N/A'),
+                localized_title=imdb_data.get('localized_title', 'N/A'),
+                kind=imdb_data.get('kind', 'N/A'),
+                imdb_id=imdb_data.get("imdb_id", 'N/A'),
+                cast=imdb_data.get("cast", 'N/A'),
+                runtime=imdb_data.get("runtime", 'N/A'),
+                countries=imdb_data.get("countries", 'N/A'),
+                certificates=imdb_data.get("certificates", 'N/A'),
+                languages=imdb_data.get("languages", 'N/A'),
+                director=imdb_data.get("director", 'N/A'),
+                writer=imdb_data.get("writer", 'N/A'),
+                producer=imdb_data.get("producer", 'N/A'),
+                composer=imdb_data.get("composer", 'N/A'),
+                cinematographer=imdb_data.get("cinematographer", 'N/A'),
+                music_team=imdb_data.get("music_team", 'N/A'),
+                distributors=imdb_data.get("distributors", 'N/A'),
+                release_date=imdb_data.get('release_date', 'N/A'),
+                year=imdb_data.get('year', 'N/A'),
+                genres=imdb_data.get('genres', 'N/A'),
+                poster=imdb_data.get('poster', ''), # Poster URL itself might not be needed in text
+                plot=imdb_data.get('plot', 'N/A'),
+                rating=str(imdb_data.get("rating", 'N/A')),
+                url=imdb_data.get('url', '#'),
+                mention=original_message.from_user.mention,
+                search=search_term, # Added search term
+                total_results=total_results_count, # Added total results
+                remaining_seconds=time_taken_str, # Added time taken
+                bot_name=temp_module.U_NAME # Assuming temp stores bot username
+                # Add any other placeholders your template uses
+            )
+        except KeyError as e:
+            logger.error(f"Missing key in IMDB_TEMPLATE_TXT: {e}")
+            current_template = f"<b>Query: {search_term}</b>\nTitle: {imdb_data.get('title', 'N/A')}\nYear: {imdb_data.get('year', 'N/A')}\nRating: {imdb_data.get('rating', 'N/A')}"
+
+        temp_module.IMDB_CAP[original_message.from_user.id] = current_template # If you cache this
+    else: # No IMDb data
+        current_template = f"<b>🌿 Requested For : {search_term}\n🗣️ By : {original_message.from_user.mention}\n📚 Total Files : {total_results_count}\n⏰ Result In : {time_taken_str} sᴇᴄᴏɴᴅs\n\n</b>"
+    
+    # Add file links if not using button mode
+    if not settings.get("button", True): # Assuming default is button mode if not set
+        file_links_text = ""
+        for file_item in files_list: # files_list are the actual Media objects
+            file_name_display = ' '.join(filter(lambda x: not x.startswith('Original') # etc.
+                                     , file_item.file_name.split()))
+            file_size_display = get_size(file_item.file_size)
+            
+            start_param = f"short_{file_item.file_id}" if settings.get('is_shortlink') else f"files_{file_item.file_id}"
+            file_link = f"https://telegram.me/{temp_module.U_NAME}?start={start_param}"
+            file_links_text += f"<b>\n\n<a href='{file_link}'>📚 {file_size_display} ▷ {file_name_display}</a></b>"
+        current_template += file_links_text
+        
+    return current_template
         else:
             return
     else:
