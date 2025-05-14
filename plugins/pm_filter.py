@@ -2388,7 +2388,7 @@ async def generate_final_caption(settings, imdb_data, search_term, files_list, t
         current_template += file_links_text
         
     return current_template
-        else:
+    else:
             return
     else:
         message = msg.message.reply_to_message  # msg will be callback query
