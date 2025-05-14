@@ -1976,7 +1976,97 @@ async def cb_handler(client: Client, query: CallbackQuery):
             await query.message.edit_reply_markup(reply_markup)
     await query.answer(MSG_ALRT)
 
+ async def get_db_spell_check_suggestions(chat_id, user_query, client, settings,
+                                         threshold_suggestion=0.60, 
+                                         threshold_direct_send=0.80,
+                                         candidate_limit=100): # Max candidates to check for similarity
+    """
+    Fetches potential matches from the database for a user query, scores them by similarity.
+    Returns:
+        - direct_send_candidate (dict): {'name': str, 'score': float, 'original_object': Media}
+        - suggestions (list of dict): [{'name': str, 'score': float, 'original_object': Media}]
+    """
+    # Attempt to get a list of candidate files from the database.
+    # This is a critical part for performance.
+    # We use filter=True initially, but a broader search might be needed.
     
+    # Clean the user query for better matching with cleaned DB names
+    cleaned_user_query = user_query.lower()
+    cleaned_user_query = re.sub(r"(_|\-|\.|\+)", " ", cleaned_user_query) # Mimic some cleaning
+    cleaned_user_query = ' '.join(cleaned_user_query.split())
+
+
+    # Fetch candidate files. `get_search_results` uses regex.
+    # To get more candidates for spell check, we might need a less strict regex or other strategy.
+    # For now, we use the existing function, which might limit candidates.
+    # Consider passing a modified, broader query if initial user_query gives too few candidates.
+    candidate_files, _, _ = await get_search_results(chat_id, user_query, offset=0, filter=True, max_results=candidate_limit)
+
+    if not candidate_files:
+        # Try a slightly broader search if the first attempt yields nothing.
+        # This is a basic attempt; a more sophisticated keyword extraction and OR-based search could be better.
+        if ' ' in user_query:
+            query_parts = user_query.split(' ')
+            temp_candidates = []
+            for part in query_parts:
+                if len(part) > 2: # Avoid very short, common words
+                    files, _, _ = await get_search_results(chat_id, part, offset=0, filter=True, max_results=30)
+                    temp_candidates.extend(files)
+            
+            # Deduplicate candidate_files based on file_id
+            seen_ids = set()
+            unique_files = []
+            for f_obj in temp_candidates:
+                if f_obj.file_id not in seen_ids:
+                    unique_files.append(f_obj)
+                    seen_ids.add(f_obj.file_id)
+            candidate_files = unique_files
+
+
+    if not candidate_files:
+        return None, []
+
+    scored_matches = []
+    for file_obj in candidate_files:
+        # Clean the database filename for comparison
+        db_filename_cleaned = file_obj.file_name.lower()
+        # Remove common extensions for a more robust match if needed, e.g., .mkv, .mp4
+        db_filename_cleaned = re.sub(r'\.(mkv|mp4|avi|srt)$', '', db_filename_cleaned).strip()
+        db_filename_cleaned = re.sub(r"(_|\-|\.|\+)", " ", db_filename_cleaned) # Mimic some cleaning
+        db_filename_cleaned = ' '.join(db_filename_cleaned.split())
+
+
+        similarity = get_string_similarity(cleaned_user_query, db_filename_cleaned)
+        
+        # You can add bonus points if years match, if years are parsed from query and filename
+        # For now, direct similarity should capture this if years are part of the name.
+
+        if similarity >= threshold_suggestion: # Only consider if above suggestion threshold
+            scored_matches.append({
+                'name': file_obj.file_name,  # Original name for display and re-query
+                'score': similarity,
+                'original_object': file_obj # Keep the original Media object
+            })
+    
+    scored_matches.sort(key=lambda x: x['score'], reverse=True)
+
+    direct_send_candidate = None
+    suggestions_list = []
+
+    if not scored_matches:
+        return None, []
+
+    # Check for direct send (top match >= threshold_direct_send)
+    if scored_matches[0]['score'] >= threshold_direct_send:
+        direct_send_candidate = scored_matches[0]
+        # Per user request, if 80% match, send directly, no other suggestions displayed via this path.
+    else: 
+        # No direct send candidate, so all relevant matches become suggestions
+        # Filter again just to be sure, although initial filter was threshold_suggestion
+        suggestions_list = [match for match in scored_matches if match['score'] >= threshold_suggestion] 
+        
+    return direct_send_candidate, suggestions_list[:5] # Return top 5 suggestions if not direct sending
+   
 async def auto_filter(client, msg, spoll=False):
     curr_time = datetime.now(pytz.timezone('Asia/Kolkata')).time()
     #reqstr1 = msg.from_user.id
