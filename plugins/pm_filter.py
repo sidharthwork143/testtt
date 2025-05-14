@@ -2321,7 +2321,7 @@ async def auto_filter(client, msg, spoll=False):
         await msg.message.delete() # Delete the suggestion message
 
 # You'll need a helper to generate the final caption consistently
-async def generate_final_caption(settings, imdb_data, search_term, files_list, total_results_count, time_taken_str, client, original_message, temp_module):
+    async def generate_final_caption(settings, imdb_data, search_term, files_list, total_results_count, time_taken_str, client, original_message, temp_module):
     # This function should replicate how your bot currently builds its main response message caption.
     # It uses `search_term` which is the (potentially corrected) term for which results are shown.
     
@@ -2388,8 +2388,7 @@ async def generate_final_caption(settings, imdb_data, search_term, files_list, t
         current_template += file_links_text
         
     return current_template
-    else:
-            return
+
     else:
         message = msg.message.reply_to_message  # msg will be callback query
         search, files, offset, total_results = spoll
